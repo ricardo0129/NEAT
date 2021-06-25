@@ -1,0 +1,55 @@
+Notes
+
+Genomes
+-genomes are linear representation of network
+-genomes include conenction genomes
+-connection genes have {in/out nodes, weight, enable bit, innovation numebr}
+
+Mutation
+-add connection: a connection is added connecting two previously unconnected nodes
+-add node: an existing connection is split and a new node is added. Old connection disabled new connection leading to the new node weight of 1. and the latter old weight
+
+Historical markings
+-each gene is tracked through a global innovation numebr
+
+Mating
+-matching genes are inhered randomly, disjoint and excess genes are inhereted from more fit parent
+-equal fitness means randomly chosen genes
+-Theres a preset change that inhereted gene is disabled if it is disabled in either parent 
+-disabled genes may become enabled again in the future 
+
+speciation
+-delta = c1E/N + c2D/N + c3*W
+E is number of excess
+D is number of disjoin
+W is the average weight difference of matching genes inlcuding disabeld 
+N the number of genes in the larger genome. N if both are small ie <20. 
+-Each species has a genome as its represetative
+-The new generation gets placed in the first species that is close with the representative of that species
+-If there isn't a any species then a new one is created with that genome as the representative 
+
+fitness
+-fi' = fi/sh(d(i,j))for all j
+the denomination reduces to the number of organisms in the species(said by the paper but doesnt make sense)
+-The function d(i,j) is 0 or 1 depending if the threshold dt is reached. But we know that when choosing where an organism is put, 
+we just pick the first species. This means there can be multiple organims where the threshold is achieved but not part of that species.
+-I shall implement it as said but might go back and fix this 
+-In rare conditions where the fitness of the entire population doesnt increase after 20 gens. Then only the top two species are allowed to reproduce 
+
+params
+-c1: 1.0
+-c2: 1.0
+-c3: 0.4
+dt = 3.0
+champion of species with >5 moved on unchanged
+-80% chance of a genome wegiht mutated
+-90% uniforfmly perturbed 10% being assinged new random value 
+-75% chance the inheried gene was disabled if either parent had it disabeld
+-25% of offsprint were result of mutation without crossover
+-interspecies mating was 0.001
+-in smaller networks adding new node 0.03, new link mutation 0.05
+-in larger adding new link was 0.3	
+-activation function sgimoidal (1/(1+exp(x*-4.9))) 
+
+
+
