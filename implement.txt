@@ -48,7 +48,6 @@ champion of species with >5 moved on unchanged
 -25% of offsprint were result of mutation without crossover
 -interspecies mating was 0.001
 -in smaller networks adding new node 0.03, new link mutation 0.05
--in larger adding new link was 0.3	
 -activation function sgimoidal (1/(1+exp(x*-4.9))) 
 
 
