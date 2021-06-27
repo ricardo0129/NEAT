@@ -1,5 +1,5 @@
 from constants import PERTURBANCE_RATE,INF
-from math_operators import perturbe, probability, randInt, randomize
+from math_operators import perturbe, probability, randInt, randomRange, randomize, sigmoid
 
 
 class Connection():
@@ -20,8 +20,6 @@ class Connection():
 		else:
 			self.w = randomize()
 	
-
-
 class Genome():
 	#add inputNodes, outputNodes, and One Bias Node
 	def __init__(self,inputNodes,outputNodes):
@@ -29,6 +27,11 @@ class Genome():
 		self.inputSize = inputNodes
 		self.outputSize = outputNodes
 		self.genes = []
+		z = 0
+		for i in range(inputNodes):
+			for j in range(outputNodes):
+				self.genes.append(Connection(i,j+inputNodes+1+INF,z,randomRange(-1.0,1.0)))
+				z += 1
 		self.connections = set()
 		self.NodePlace = {}
 		self.TotalNodes = inputNodes+outputNodes+1
@@ -69,16 +72,21 @@ class Genome():
 			if(self.genes[i].e==1):
 				break
 		return (self.genes[i].u,self.gens[i].v)
-
-
-
-
-class Population():
-	def __init__(self,populationSize,inputNodes,OutputNodes):
-		self.globalInovation = 0
-		self.population = [Genome(inputNodes,OutputNodes) for i in range(populationSize)]
-		self.innovations = {}
-
-P = Population(10,4,1)
-
-		
+	
+	def evaluate(self,input):
+		nodeVal = input+[0]*(len(self.nodes)-self.inputSize)
+		self.genes = sorted(self.genes, key = lambda genes: genes.v)
+		sorted(self.nodes)
+		nodeMapping = {}
+		for i,g in enumerate(self.nodes):
+			nodeMapping[g] = i 
+		for i in range(0,len(self.genes)):
+			genome = self.genes[i]
+			print(genome.u,genome.v,genome.w)
+			if(genome.e==1):
+				u = nodeMapping[genome.u]
+				v = nodeMapping[genome.v]
+				nodeVal[v] += nodeVal[u]*genome.w
+			if(i==len(self.genes)-1 or nodeMapping[self.genes[i+1].v]!=v):
+				nodeVal[v] = sigmoid(nodeVal[v])
+		return nodeVal[self.inputSize+1:]

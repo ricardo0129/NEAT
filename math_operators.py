@@ -15,6 +15,9 @@ def perturbe(x):
 def randomize():
 	return random.random() 
 
+def randomRange(a,b):
+	return a+(b-a)*random.random()
+
 def randInt(a,b):
 	return random.randint(a,b)
 
