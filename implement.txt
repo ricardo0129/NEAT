@@ -1,5 +1,10 @@
 Notes
 
+genetic algorithm
+-selection
+-crossover
+-mutation
+
 Genomes
 -genomes are linear representation of network
 -genomes include conenction genomes
@@ -49,6 +54,6 @@ champion of species with >5 moved on unchanged
 -interspecies mating was 0.001
 -in smaller networks adding new node 0.03, new link mutation 0.05
 -activation function sgimoidal (1/(1+exp(x*-4.9))) 
-
+-adding connection weight from [-2,2]
 
 
