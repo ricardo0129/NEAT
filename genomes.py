@@ -10,7 +10,7 @@ class Connection():
 		self.w = w
 		self.e = 1 
 		self.i = i
-	
+
 	def disableConnection(self):
 		self.e = 0
 
@@ -19,6 +19,10 @@ class Connection():
 			self.w = perturbe(self.w)
 		else:
 			self.w = randomize()
+	
+	def __str__(self):
+		return "("+str(self.u)+"->"+str(self.v)+",w:"+str(self.w)+",e:"+str(self.e)+",i:"+str(self.i)+")"
+	
 	
 class Genome():
 	#add inputNodes, outputNodes, and One Bias Node
@@ -29,14 +33,9 @@ class Genome():
 		self.NodePlace = {}
 		self.genes = []
 		self.connections = set()
-		z = 0
-		for i in range(inputNodes):
-			for j in range(outputNodes):
-				self.addConnection(i,j+inputNodes+1+INF,z,randomRange(-1.0,1.0))
-				z += 1
 	
 	def connectionExist(self,u,v):
-		if((u,v) in self.connections):
+		if (u,v) in self.connections:
 			return True
 		return False
 
@@ -45,22 +44,22 @@ class Genome():
 		self.genes.append(Connection(u,v,inno,w))
 		self.connections.add((u,v))
 	
-	def splitConnection(self,u,v,d,inno):
+	def splitConnection(self,u,v,d,inno1,inno2):
 		i = self.NodePlace[(u,v)]
 		self.genes[i].disableConnection()
-		self.addConnection(u,d,inno,1.0)
-		self.addConnection(d,v,inno+1,randomRange(-1.0,1.0))
+		self.addConnection(u,d,inno1,1.0)
+		self.addConnection(d,v,inno2,randomRange(-1.0,1.0))
 		self.nodes.append(d)
 	
 	def findNewConnection(self):
 		while True:
 			u = self.nodes[randInt(0,len(self.nodes)-1)]
 			v = self.nodes[randInt(0,len(self.nodes)-1)]
-			if(u>v):
+			if u>v:
 				u,v = v,u
-			if((u<=self.inputSize and v<=self.inputSize) or (u>=INF and v>=INF)):
+			if (u<=self.inputSize and v<=self.inputSize) or (u>=INF and v>=INF):
 				continue
-			if(u!=v and not (u,v) in self.connections):
+			if u!=v and not (u,v) in self.connections:
 				return u,v
 
 	def findSplit(self):
@@ -68,7 +67,7 @@ class Genome():
 		i = -1
 		while True:
 			i = randInt(0,n-1)
-			if(self.genes[i].e==1):
+			if self.genes[i].e==1:
 				break
 		return (self.genes[i].u,self.genes[i].v)
 	
@@ -81,11 +80,11 @@ class Genome():
 			nodeMapping[g] = i 
 		for i in range(0,len(self.genes)):
 			genome = self.genes[i]
-			if(genome.e==1):
+			if genome.e==1:
 				u = nodeMapping[genome.u]
 				v = nodeMapping[genome.v]
 				nodeVal[v] += nodeVal[u]*genome.w
-				if(i==len(self.genes)-1 or nodeMapping[self.genes[i+1].v]!=v):
+				if (i==len(self.genes)-1) or (nodeMapping[self.genes[i+1].v]!=v):
 					nodeVal[v] = sigmoid(nodeVal[v])
 		return nodeVal[(len(self.nodes)-self.outputSize):]
 

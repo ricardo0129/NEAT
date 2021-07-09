@@ -24,3 +24,14 @@ def randInt(a,b):
 def sigmoid(x):
 	return 1.0/(1+math.exp(-4.9*x))
 
+def binarySearch(A,x):
+	L = 0, R = len(A)
+	while L<=R:
+		M = int((L+R)/2)
+		if A[M].i==x:
+			return M
+		elif A[M].i<x:
+			L = M+1
+		else:
+			R = M-1
+	return -1
